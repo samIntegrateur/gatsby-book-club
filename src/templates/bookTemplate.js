@@ -1,18 +1,17 @@
 import React from 'react';
-import Layout from '../components/layout';
 import BookItem from '../components/BookItem';
 import {graphql} from 'gatsby';
 
 const BookTemplate = (props) => {
   return (
-    <Layout>
+    <div>
       <BookItem
         bookCover={props.data.book.localImage.childImageSharp.fixed}
         bookTitle={props.data.book.title}
         bookSummary={props.data.book.summary}
         authorName={props.data.book.author.name}
       />
-    </Layout>
+    </div>
   )
 }
 

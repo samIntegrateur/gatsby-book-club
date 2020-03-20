@@ -1,7 +1,6 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
 import styled from 'styled-components';
-import Layout from "../components/layout"
 import BookItem from '../components/BookItem';
 
 const Btn = styled.div`
@@ -25,7 +24,7 @@ const Btn = styled.div`
 const IndexPage = (props) => {
   // console.log('props', props);
   return (
-    <Layout>
+    <div>
       {props.data.allBook.edges.map(edge => (
         <BookItem
           key={edge.node.id}
@@ -41,7 +40,7 @@ const IndexPage = (props) => {
           </Btn>
         </BookItem>
       ))}
-    </Layout>
+    </div>
   );
 
 }
