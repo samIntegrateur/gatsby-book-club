@@ -1,5 +1,4 @@
 import firebaseConfig from "./config";
-import axios from 'axios';
 
 class Firebase {
   constructor(app) {
@@ -15,6 +14,19 @@ class Firebase {
 
   async login({email, password}) {
     return this.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  async register({email, password, username}) {
+    const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
+    console.log('newUser', newUser);
+    // create a new publicProfiles item
+    return this.db.collection('publicProfiles').doc(username).set({
+      userId: newUser.user.uid
+    });
+  }
+
+  async getUserProfile({userId}) {
+    return this.db.collection('publicProfiles').where('userId', '==', userId).get();
   }
 
   async logout() {

@@ -35,7 +35,6 @@ const HeaderContent = styled.div`
   a {
     cursor: pointer;
     text-decoration: underline;
-    display: block;
     color: white;
     text-align:right;
     &:hover {
@@ -44,9 +43,16 @@ const HeaderContent = styled.div`
   }
 `;
 
+const Divider = styled.span`
+  margin: 0 0.5rem;
+  padding-right: 1px;
+  background-color: #ddd;
+`;
+
 const Header = ({ siteTitle }) => {
 
   const {firebase, user} = useContext(FirebaseContext);
+  console.log('user', user);
 
   function handleLogout() {
     firebase.logout().then(() => navigate('/login'))
@@ -69,7 +75,7 @@ const Header = ({ siteTitle }) => {
         <div>
           {!!user && !!user.email &&
             <div style={{color: '#FFC107'}}>
-              Hello, {user.email}
+              Hello, {user.username || user.email}
               <LogoutLink onClick={handleLogout}>
                 Logout
               </LogoutLink>
@@ -78,6 +84,8 @@ const Header = ({ siteTitle }) => {
           { (!user || !user.email) &&
             <div>
               <Link to={"/login"}>Login</Link>
+              <Divider />
+              <Link to={"/register"}>Register</Link>
             </div>
           }
         </div>
