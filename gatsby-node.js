@@ -16,11 +16,6 @@ exports.createPages = ({graphql, actions}) => {
         edges {
           node {
             id
-            summary
-            title
-            author {
-              name
-            }
           }
         }
       }
@@ -34,7 +29,11 @@ exports.createPages = ({graphql, actions}) => {
       createPage({
         path: `/book/${book.node.id}`,
         component: bookTemplate,
-        context: book.node
+        // we have to do this, instead of just getting node, in order to use GatsbyImageSharpFixed
+        // https://www.udemy.com/course/gatsby-js-firebase-hybrid-realtime-static-sites/learn/lecture/15777138#questions
+        context: {
+          bookId: book.node.id
+        }
       })
     })
   })
