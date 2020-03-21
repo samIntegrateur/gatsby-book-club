@@ -25,12 +25,23 @@ class Firebase {
     });
   }
 
+  async postComment({text, bookId}){
+    const myCloudFunctionName = 'postComment';
+    const postCommentCallable = this.functions.httpsCallable(myCloudFunctionName);
+    return postCommentCallable({
+      text,
+      bookId
+    });
+  }
+
   subscribeToBookComments({bookId, onSnapshot}) {
     const bookRef = this.db.collection('books').doc(bookId);
     // bookRef / book is a firebase reference, not an string
     // https://www.udemy.com/course/gatsby-js-firebase-hybrid-realtime-static-sites/learn/lecture/16021074#overview
     // onSnapshot will execute each time there is a new comment
-    return this.db.collection('comments').where('book', '==', bookRef)
+    return this.db.collection('comments')
+      .where('book', '==', bookRef)
+      .orderBy('dateCreated', 'desc')
       .onSnapshot(onSnapshot);
   }
 

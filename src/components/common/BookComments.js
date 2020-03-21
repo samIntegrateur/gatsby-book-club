@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {Input} from './Input';
 import {Button} from './Button';
+import moment from 'moment';
 
 const CommentSection = styled.section`
   margin-top: 1.5rem;
@@ -36,11 +37,17 @@ const CommentListItem = styled.li`
   p {
     padding-left: 1rem;
   }
+  small {
+    color: #666;
+    font-family: Arial;
+    font-style: italic;
+  }
 `;
 
 export const BookComments = ({firebase, bookId}) => {
 
   const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     const unsubscribe = firebase.subscribeToBookComments({
@@ -68,19 +75,36 @@ export const BookComments = ({firebase, bookId}) => {
 
   console.log('comments', comments);
 
+  function handlePostComment(e) {
+    e.preventDefault();
+    console.log(commentText);
+    firebase.postComment({
+      text: commentText,
+      bookId
+    })
+  }
+
   return (
-    <CommentSection>
+    <CommentSection onSubmit={handlePostComment}>
       <h2>Comments</h2>
       <CommentForm>
-        <Input />
-        <Button>
+        <Input value={commentText} onChange={e => {
+          e.persist(); // we need it when we do asynchronous stuff
+          setCommentText(e.target.value);
+        }} />
+        <Button type="submit">
           Post comment
         </Button>
       </CommentForm>
       <CommentList>
         {comments.map(comment => (
           <CommentListItem key={comment.id}>
-            <strong>{comment.username}</strong>
+            <strong>
+              {comment.username}
+            </strong>
+            <small>
+              &nbsp;-&nbsp;{moment(comment.dateCreated.toDate()).format('HH:mm Do MMM YYYY')}
+            </small>
             <p>{comment.text}</p>
           </CommentListItem>
         ))}
