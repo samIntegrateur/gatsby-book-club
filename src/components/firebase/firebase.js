@@ -25,6 +25,15 @@ class Firebase {
     });
   }
 
+  subscribeToBookComments({bookId, onSnapshot}) {
+    const bookRef = this.db.collection('books').doc(bookId);
+    // bookRef / book is a firebase reference, not an string
+    // https://www.udemy.com/course/gatsby-js-firebase-hybrid-realtime-static-sites/learn/lecture/16021074#overview
+    // onSnapshot will execute each time there is a new comment
+    return this.db.collection('comments').where('book', '==', bookRef)
+      .onSnapshot(onSnapshot);
+  }
+
   async getUserProfile({userId}) {
     return this.db.collection('publicProfiles').where('userId', '==', userId).get();
   }

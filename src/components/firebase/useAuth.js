@@ -21,7 +21,7 @@ function useAuth() {
                     firebaseInstance.getUserProfile({
                         userId: userResult.uid
                     }).then(r => {
-                        console.log(r);
+                        console.log('getUserProfile then', r);
                         setUser({
                             ...userResult,
                             username: r.empty ? null : r.docs[0].id

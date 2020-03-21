@@ -1,6 +1,5 @@
 import React, {useState, useContext} from 'react';
 import {Form, Input, Button, ErrorMessage} from '../components/common';
-import {func} from 'prop-types';
 import {FirebaseContext} from '../components/firebase';
 
 const Register = () => {
