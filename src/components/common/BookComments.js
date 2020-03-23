@@ -73,8 +73,6 @@ export const BookComments = ({firebase, bookId}) => {
     }
   }, [bookId, firebase, setComments]);
 
-  console.log('comments', comments);
-
   function handlePostComment(e) {
     e.preventDefault();
     console.log(commentText);

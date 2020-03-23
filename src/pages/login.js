@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useContext, useEffect} from "react"
 import {FirebaseContext} from '../components/firebase';
 import {Form, Input, Button, ErrorMessage} from '../components/common';
 
@@ -7,13 +7,22 @@ const Login = () => {
   const [formValues, setFormValues] = useState({email: '', password: ''});
   const [errorMessage, setErrorMessage] = useState('');
   const {firebase} = useContext(FirebaseContext);
+  let isMounted = true;
+
+  useEffect(() => {
+    return () => {
+      isMounted = false;
+    }
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
 
     firebase.login({email: formValues.email, password: formValues.password}).catch(error => {
-      console.log('error', error);
-      setErrorMessage(error.message);
+      if (isMounted) {
+        console.log('error', error);
+        setErrorMessage(error.message);
+      }
     });
   }
 

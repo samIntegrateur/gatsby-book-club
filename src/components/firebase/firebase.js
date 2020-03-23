@@ -16,13 +16,39 @@ class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
 
+  async getAuthors() {
+    return this.db.collection('authors').get();
+  }
+
+  async createBook({bookName, authorId, bookCover, summary}) {
+    const createBookCallable = this.functions.httpsCallable('createBook');
+    console.log('bookName', bookName);
+    console.log('authorId', authorId);
+    console.log('bookCover', bookCover);
+    console.log('summary', summary);
+    return createBookCallable({
+      bookName,
+      authorId,
+      bookCover,
+      summary
+    })
+  }
+
   async register({email, password, username}) {
-    const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
-    console.log('newUser', newUser);
-    // create a new publicProfiles item
-    return this.db.collection('publicProfiles').doc(username).set({
-      userId: newUser.user.uid
-    });
+    // 1 create user
+    await this.auth.createUserWithEmailAndPassword(email, password);
+    // 2 create a new corresponding publicProfiles item
+    const createProfileCallable = this.functions.httpsCallable('createPublicProfile');
+    return createProfileCallable({
+      username
+    })
+  }
+
+  async createAuthor({authorName}) {
+    const createAuthorCallable = this.functions.httpsCallable('createAuthor');
+    return createAuthorCallable({
+      authorName
+    })
   }
 
   async postComment({text, bookId}){
@@ -45,8 +71,11 @@ class Firebase {
       .onSnapshot(onSnapshot);
   }
 
-  async getUserProfile({userId}) {
-    return this.db.collection('publicProfiles').where('userId', '==', userId).get();
+  getUserProfile({userId, onSnapshot}) {
+    return this.db.collection('publicProfiles')
+      .where('userId', '==', userId)
+      .limit(1)
+      .onSnapshot(onSnapshot);
   }
 
   async logout() {

@@ -4,6 +4,7 @@ import React, {useContext} from "react";
 import {FirebaseContext} from './firebase';
 import styled from 'styled-components';
 
+// This Html / css is such a shame!!!
 const LogoutLink = styled.span`
   cursor: pointer;
   text-decoration: underline;
@@ -20,6 +21,16 @@ const HeaderWrapper = styled.header`
   margin-bottom: 1.45rem;
 `;
 
+const Nav = styled.div`
+  white-space: nowrap;
+  > a, 
+  > span {
+    display: inline-block;
+    vertical-align:middle;
+  }
+`;
+
+
 const HeaderContent = styled.div`
   margin: 0 auto;
   max-width: 960px;
@@ -30,6 +41,10 @@ const HeaderContent = styled.div`
   
   h1 {
     margin: 0;
+  }
+  
+  div {
+    text-align: right;
   }
   
   a {
@@ -47,6 +62,8 @@ const Divider = styled.span`
   margin: 0 0.5rem;
   padding-right: 1px;
   background-color: #ddd;
+  width: 1px;
+  height: 1em;
 `;
 
 const Header = ({ siteTitle }) => {
@@ -75,10 +92,25 @@ const Header = ({ siteTitle }) => {
         <div>
           {!!user && !!user.email &&
             <div style={{color: '#FFC107'}}>
-              Hello, {user.username || user.email}
-              <LogoutLink onClick={handleLogout}>
-                Logout
-              </LogoutLink>
+              <div>Hello, {user.username || user.email}</div>
+              <Nav>
+                {!!user.isAdmin &&
+                <>
+                  <Link to="/add-author">
+                    Add author
+                  </Link>
+                  <Divider />
+                  <Link to="/add-book">
+                    Add book
+                  </Link>
+                  <Divider />
+                </>
+                }
+                <LogoutLink onClick={handleLogout}>
+                  Logout
+                </LogoutLink>
+              </Nav>
+
             </div>
           }
           { (!user || !user.email) &&

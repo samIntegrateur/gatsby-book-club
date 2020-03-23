@@ -74,4 +74,3 @@ yarn-error.log
 # firebase private key
 firebase.json
 
-src/components/firebase/config.js

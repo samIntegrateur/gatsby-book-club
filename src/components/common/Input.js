@@ -11,3 +11,15 @@ export const Input = styled.input`
     border-color: rebeccapurple;
   }
 `;
+
+export const Select = styled.select`
+  display:block;
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid gray;
+  margin-bottom: 1rem;
+  
+  &:focus, &:active {
+    border-color: rebeccapurple;
+  }
+`;
